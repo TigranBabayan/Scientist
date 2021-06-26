@@ -1,0 +1,153 @@
+﻿@using X.PagedList.Mvc.Core;
+@using X.PagedList;
+@{
+    Layout = "_Layout";
+}
+
+@model IEnumerable<scientist.Models.Scientist>
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+<button class="btn btn-primary fa-pull-right" data-toggle="modal" data-target=".bd-example-modal-lg">Որոնել</button>
+
+
+<div class="modal fade bd-example-modal-lg" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-body">
+                <form method="get" asp-action="Search" asp-controller="Scientists">
+                    <div class="row form-group ">
+                        <div class="col-lg-6 col-md-6 col-sm-6">
+                            <label>Ա․Ա․Հ․</label>
+                            <input type="search" list="persons" class="form-control" name="FullName" autocomplete="off">
+                            <datalist id="persons">
+                                @foreach (var item in Model.ToList())
+                                {
+                                    <option value="@item.FullName">@item.FullName</option>
+                                }
+                            </datalist>
+                        </div>
+                        <div class="col-lg-6 col-md-6 col-sm-6">
+                            <label>Քաղաքացիություն</label>
+                            <input name="Citizenship" class="form-control" autocomplete="off" />
+                        </div>
+                        <div class="col-lg-6 col-md-6 col-sm-6">
+                            <label>Մասնագիտություն</label>
+                            <input name="Profession" class="form-control" autocomplete="off" />
+                        </div>
+                        <div class="col-lg-6 col-md-6 col-sm-6">
+                            <label>Աշհ․ վայր</label>
+                            <input name="Workplace" class="form-control" autocomplete="off" />
+                        </div>
+                        <div class="col-lg-6 col-md-6 col-sm-6">
+                            <label>Բնակ․ վայր</label>
+                            <input name="Livingplace" class="form-control" autocomplete="off" />
+                        </div>
+                        <div class="col-lg-6 col-md-6 col-sm-6">
+                            <label>Գիտ․ կոչում</label>
+                            <input name="Degree" class="form-control" autocomplete="off" />
+                        </div>
+
+                        <div class="col-lg-6 col-md-6 col-sm-6">
+                            <label>Սկիզբ</label>
+                            <input name="StartDate" class="form-control" type="date" />
+                        </div>
+                        <div class="col-lg-6 col-md-6 col-sm-6">
+                            <label>Ավարտ</label>
+                            <input name="EndDate" class="form-control" type="date" />
+                        </div>
+                    </div>
+                    <center><button type="submit" class="btn btn-success">Որոնել<i class="fa fa-search"></i></button></center>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<p>
+    <a asp-action="Create"> Ավելացնել անձ<i class=" fa fa-plus"></i></a>
+</p>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.Id)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.FullName)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Cityzenship)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Profession)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Workplace)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Livingplace)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Degree)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Id)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.FullName)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Cityzenship)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Profession)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Workplace)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Livingplace)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Degree)
+                </td>
+                <td>
+                    <a asp-action="Edit" asp-route-id="@item.Id"><i class="fa fa-pencil-alt" aria-hidden="true"></i></a>
+                    <a asp-action="Details" asp-route-id="@item.Id"><i class="fa fa-eye" aria-hidden="true"></i></a>
+                    <a asp-action="Delete" asp-route-id="@item.Id"><i class="fa fa-times" aria-hidden="true" style="color:red"></i></a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+@Html.PagedListPager((IPagedList)Model, page => Url.Action("Index", new { page = page }),
+    new X.PagedList.Mvc.Core.Common.PagedListRenderOptions
+    {
+        DisplayItemSliceAndTotal = true,
+        ContainerDivClasses = new[] { "navigation" },
+        LiElementClasses = new[] { "page-item" },
+        PageClasses = new[] { "page-link" },
+    })
+
+@section Scripts
+{
+    <script>
+        $(document).ready(function () {
+            $('ul.pagination > li.disabled > a').addClass('page-link');
+        });
+    </script>
+
+}
